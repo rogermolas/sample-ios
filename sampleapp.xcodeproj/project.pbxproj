@@ -15,6 +15,9 @@
 		A5D9321C27F963DE00BC12B9 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A5D9321A27F963DE00BC12B9 /* Main.storyboard */; };
 		A5D9321E27F963E000BC12B9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A5D9321D27F963E000BC12B9 /* Assets.xcassets */; };
 		A5D9322127F963E000BC12B9 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A5D9321F27F963E000BC12B9 /* LaunchScreen.storyboard */; };
+		A5EC35B1281F6149007B0EF2 /* ImageProcessing.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5EC35B0281F6149007B0EF2 /* ImageProcessing.swift */; };
+		A5EC35B3281F65BD007B0EF2 /* UIAlertViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5EC35B2281F65BD007B0EF2 /* UIAlertViewController.swift */; };
+		A5EC35B5281F68DF007B0EF2 /* FileSourceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5EC35B4281F68DF007B0EF2 /* FileSourceManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -30,6 +33,9 @@
 		A5D9321D27F963E000BC12B9 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		A5D9322027F963E000BC12B9 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		A5D9322227F963E000BC12B9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		A5EC35B0281F6149007B0EF2 /* ImageProcessing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageProcessing.swift; sourceTree = "<group>"; };
+		A5EC35B2281F65BD007B0EF2 /* UIAlertViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIAlertViewController.swift; sourceTree = "<group>"; };
+		A5EC35B4281F68DF007B0EF2 /* FileSourceManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileSourceManager.swift; sourceTree = "<group>"; };
 		C0227308CC2AB58E219EAC9D /* Pods-sampleapp.app-green-camera-roll.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-sampleapp.app-green-camera-roll.xcconfig"; path = "Target Support Files/Pods-sampleapp/Pods-sampleapp.app-green-camera-roll.xcconfig"; sourceTree = "<group>"; };
 		D39F4523844757CD3E4FEB09 /* Pods-sampleapp.app-red-built-in-camera.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-sampleapp.app-red-built-in-camera.xcconfig"; path = "Target Support Files/Pods-sampleapp/Pods-sampleapp.app-red-built-in-camera.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -86,16 +92,59 @@
 		A5D9321327F963DE00BC12B9 /* sampleapp */ = {
 			isa = PBXGroup;
 			children = (
+				A5EC35AD281F60F3007B0EF2 /* Root */,
+				A5EC35AC281F60D8007B0EF2 /* Service */,
+				A5EC35AB281F60C9007B0EF2 /* Controller */,
+				A5EC35AE281F6104007B0EF2 /* Extension */,
+				A5EC35AF281F6113007B0EF2 /* Resource */,
+			);
+			path = sampleapp;
+			sourceTree = "<group>";
+		};
+		A5EC35AB281F60C9007B0EF2 /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				A5D9321827F963DE00BC12B9 /* ViewController.swift */,
+			);
+			path = Controller;
+			sourceTree = "<group>";
+		};
+		A5EC35AC281F60D8007B0EF2 /* Service */ = {
+			isa = PBXGroup;
+			children = (
+				A5EC35B0281F6149007B0EF2 /* ImageProcessing.swift */,
+				A5EC35B4281F68DF007B0EF2 /* FileSourceManager.swift */,
+			);
+			path = Service;
+			sourceTree = "<group>";
+		};
+		A5EC35AD281F60F3007B0EF2 /* Root */ = {
+			isa = PBXGroup;
+			children = (
 				A5D9321427F963DE00BC12B9 /* AppDelegate.swift */,
 				A5D9321627F963DE00BC12B9 /* SceneDelegate.swift */,
-				A5D9321827F963DE00BC12B9 /* ViewController.swift */,
+			);
+			path = Root;
+			sourceTree = "<group>";
+		};
+		A5EC35AE281F6104007B0EF2 /* Extension */ = {
+			isa = PBXGroup;
+			children = (
 				A50334BB27FB552D00F665B7 /* String.swift */,
+				A5EC35B2281F65BD007B0EF2 /* UIAlertViewController.swift */,
+			);
+			path = Extension;
+			sourceTree = "<group>";
+		};
+		A5EC35AF281F6113007B0EF2 /* Resource */ = {
+			isa = PBXGroup;
+			children = (
 				A5D9321A27F963DE00BC12B9 /* Main.storyboard */,
 				A5D9321D27F963E000BC12B9 /* Assets.xcassets */,
 				A5D9321F27F963E000BC12B9 /* LaunchScreen.storyboard */,
 				A5D9322227F963E000BC12B9 /* Info.plist */,
 			);
-			path = sampleapp;
+			path = Resource;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -213,8 +262,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A5EC35B5281F68DF007B0EF2 /* FileSourceManager.swift in Sources */,
+				A5EC35B1281F6149007B0EF2 /* ImageProcessing.swift in Sources */,
 				A5D9321927F963DE00BC12B9 /* ViewController.swift in Sources */,
 				A5D9321527F963DE00BC12B9 /* AppDelegate.swift in Sources */,
+				A5EC35B3281F65BD007B0EF2 /* UIAlertViewController.swift in Sources */,
 				A50334BC27FB552D00F665B7 /* String.swift in Sources */,
 				A5D9321727F963DE00BC12B9 /* SceneDelegate.swift in Sources */,
 			);
@@ -306,7 +358,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = sampleapp/Info.plist;
+				INFOPLIST_FILE = sampleapp/Resource/Info.plist;
 				INFOPLIST_KEY_NSCameraUsageDescription = "Adding photo from the device camera.";
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "Adding photos from the gallery.";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -392,7 +444,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = sampleapp/Info.plist;
+				INFOPLIST_FILE = sampleapp/Resource/Info.plist;
 				INFOPLIST_KEY_NSCameraUsageDescription = "Adding photo from the device camera.";
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "Adding photos from the gallery.";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -479,7 +531,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = sampleapp/Info.plist;
+				INFOPLIST_FILE = sampleapp/Resource/Info.plist;
 				INFOPLIST_KEY_NSCameraUsageDescription = "Adding photo from the device camera.";
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "Adding photos from the gallery.";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -565,7 +617,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = sampleapp/Info.plist;
+				INFOPLIST_FILE = sampleapp/Resource/Info.plist;
 				INFOPLIST_KEY_NSCameraUsageDescription = "Adding photo from the device camera.";
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "Adding photos from the gallery.";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;

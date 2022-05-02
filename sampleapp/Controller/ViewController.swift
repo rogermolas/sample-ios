@@ -6,7 +6,6 @@
 //
 
 import UIKit
-import Vision
 import Photos
 import MBProgressHUD
 
@@ -16,125 +15,58 @@ class ViewController: UIViewController  {
     @IBOutlet weak var totalLabel: UILabel!
     
     var imagePicker =  UIImagePickerController()
-    
-    lazy var request: VNRecognizeTextRequest = {
-        let request = VNRecognizeTextRequest(completionHandler: self.requestHandler)
-        request.recognitionLevel = .accurate
-        return request
-    }()
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
-
-#if GREEN_CR
+        #if GREEN_CR
         self.view.backgroundColor = .green
-#elseif GREEN_FILE
+        #elseif GREEN_FILE
         self.view.backgroundColor = .green
-#else
+        #else
         self.view.backgroundColor = .red
-#endif
-
+        #endif
     }
     
-    func parse(string:String) {
-        self.prcessing(flag: false)
-        let pattern = #"((^|\s)-)?(\d*\.\d+|\d+)[\+\-\*\/]((^|\s)-)?(\d*\.\d+|\d+)"#
-        let results = string.match(pattern: pattern)
-        guard let expression = results.first?.first else {
-            alert(title: "No expression Found!",
-                  message: "Found: \(string)")
-            return
-        }
-        DispatchQueue.main.async {
+    //MARK: - Image processing
+    func process(image: UIImage) {
+        self.prcessing(flag: true)
+        ImageProcessing.shared.read(image: image) { expression, error in
+            self.prcessing(flag: false)
+            guard error == nil else {
+                self.alert(title: error!)
+                return
+            }
             self.inputLabel.text = expression
-            let expn = NSExpression(format:expression)
+            let expn = NSExpression(format:expression!)
             let total = expn.expressionValue(with: nil, context: nil)
-            self.totalLabel.text = "= \(total ?? 0)"
-        }
-    }
-    
-    private func process(image: UIImage) {
-        guard let cgImage = image.cgImage else { return }
-        
-        let requests = [request]
-        let imageRequestHandler = VNImageRequestHandler(cgImage: cgImage, orientation: .up, options: [:])
-        DispatchQueue.global(qos: .userInitiated).async {
-            do {
-                try imageRequestHandler.perform(requests)
-            } catch let error {
-                print("Error: \(error)")
-                self.prcessing(flag: false)
-            }
-        }
-    }
-    
-    private func requestHandler(request: VNRequest?, error: Error?) {
-        if let error = error {
-            alert(title: "Error", message: error.localizedDescription)
-            return
-        }
-        guard let results = request?.results, results.count > 0 else {
-            alert(title: "Error", message: "No text was found.")
-            return
-        }
-        
-        for result in results {
-            var results = ""
-            if let observation = result as? VNRecognizedTextObservation {
-                for text in observation.topCandidates(1) {
-                    results.append(text.string)
-                }
-                self.parse(string: results)
-            }
+            self.totalLabel.text = "\(total ?? 0)"
         }
     }
     
     //MARK: - Image Source
     @IBAction func addFile(sender: UIButton) {
-        let actionSheet = UIAlertController(title: "Add File",
-                                      message: "Please select file source",
-                                      preferredStyle: .actionSheet)
-        let camera = UIAlertAction(title: "Camera", style: .default) { action in
+        FileSourceManager.shared.addSource(target: sender, owner: self) {
             self.openCamera()
-        }
-        let library = UIAlertAction(title: "Camera Roll", style: .default) { action in
+        } cameraRollAction: {
             self.openPhotoLibrary()
-        }
-        let filePicker = UIAlertAction(title: "File System", style: .default) { action in
+        } fileAction: {
             self.openFilePicker()
         }
-        let cancel = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
-        
-        
-#if GREEN_CR
-        actionSheet.addAction(library)
-#elseif GREEN_FILE
-        actionSheet.addAction(filePicker)
-#elseif RED_CAMERA
-        actionSheet.addAction(camera)
-#else
-        actionSheet.addAction(library)
-#endif
-        actionSheet.addAction(cancel)
-        
-        // iPad
-        switch UIDevice.current.userInterfaceIdiom {
-        case .pad:
-            actionSheet.popoverPresentationController?.sourceView = sender
-            actionSheet.popoverPresentationController?.sourceRect = sender.bounds
-            actionSheet.popoverPresentationController?.permittedArrowDirections = .up
-        default:
-            break
-        }
-        present(actionSheet, animated: true, completion: nil)
     }
     
     private func openCamera() {
         let status = AVCaptureDevice.authorizationStatus(for: .video)
         switch (status) {
         case .denied, .restricted, .notDetermined:
-            self.alert(title: "Unable to access the Camera",
-                       message: "Please enable access to device settings")
+            UIAlertController.init(
+                title: "Unable to access the Camera",
+                message: "Please enable access to device settings") { action in
+                    guard let url = URL(string: UIApplication.openSettingsURLString) else {
+                        return
+                    }
+                    UIApplication.shared.open(url)
+            }.show(owner: self)
+
         case .authorized:
             if(UIImagePickerController .isSourceTypeAvailable(.camera)) {
                 imagePicker.sourceType = .camera
@@ -166,12 +98,9 @@ class ViewController: UIViewController  {
         present(documentPicker, animated: true, completion: nil)
     }
     
-    private func alert(title: String, message: String?) {
+    private func alert(title: String, message: String? = nil) {
         DispatchQueue.main.async {
-            self.prcessing(flag: false)
-            let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
-            alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
-            self.present(alert, animated: true, completion: nil)
+            UIAlertController.init(title: title, message: message).show(owner: self)
         }
     }
     
@@ -193,7 +122,6 @@ extension ViewController: UIImagePickerControllerDelegate, UINavigationControlle
             alert(title: "Error", message: "File can't be read")
             return
         }
-        self.prcessing(flag: true)
         self.imageView.image = imageFile
         inputLabel.text = ""
         totalLabel.text = ""
@@ -212,7 +140,6 @@ extension ViewController: UIDocumentPickerDelegate {
                   alert(title: "Error", message: "File can't be read")
                   return
               }
-              self.prcessing(flag: true)
               self.imageView.image = image
               inputLabel.text = ""
               totalLabel.text = ""
